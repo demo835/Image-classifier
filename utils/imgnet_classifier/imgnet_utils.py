@@ -2,18 +2,24 @@ import tarfile
 from six.moves import urllib
 
 from src.settings import *
+from utils.imgnet_classifier.imgnet_settings import *
 
 
 class ImgNetUtils:
-    def __int__(self):
-        self.model_dir = os.path.join(MODELS, "feature/imgnet")
-
-        self.data_url = "http://download.tensorflow.org/models/image/imagenet/imgnet-2015-12-05.tgz"
+    def __init__(self):
+        self.model_dir = IMGNET_DIR
 
         self.__create_graph()
-
-        self.sess = tf.Session()
+        config = tf.ConfigProto()
+        config.gpu_options.allow_growth = True
+        self.sess = tf.Session(config=config)
         self.softmax_tensor = self.sess.graph.get_tensor_by_name('pool_3:0')
+
+        sys.stdout.write("...init check mxnet model.\n")
+        test_img = np.ones((20, 20, 3), dtype=np.uint8)
+        test_data = cv2.imencode('.jpg', test_img)[1].tostring()
+        prediction = self.sess.run(self.softmax_tensor, {'DecodeJpeg/contents:0': test_data})
+        sys.stdout.write("...length of feature {}.\n".format(len(prediction)))
 
     def __create_graph(self):
         # Creates a graph from saved GraphDef file and returns a saver.
@@ -27,8 +33,10 @@ class ImgNetUtils:
             _ = tf.import_graph_def(graph_def, name='')
 
     def __download_and_extract_model(self):
-        # Download and extract model tar file.
+        # Download and extract imgnet tar file.
+        self.data_url = 'http://download.tensorflow.org/models/image/imagenet/inception-2015-12-05.tgz'
         dest_directory = self.model_dir
+
         if not os.path.exists(dest_directory):
             os.makedirs(dest_directory)
         filename = self.data_url.split('/')[-1]
@@ -38,6 +46,7 @@ class ImgNetUtils:
                 sys.stdout.write("\r>> Downloading %s %.1f%%" % (
                     filename, float(count * block_size) / float(total_size) * 100.0))
                 sys.stdout.flush()
+
             filepath, _ = urllib.request.urlretrieve(self.data_url, filepath, _progress)
             statinfo = os.stat(filepath)
             sys.stdout.write("\nSuccessfully downloaded {} {} bytes.\n".format(filename, statinfo.st_size))
@@ -57,3 +66,11 @@ class ImgNetUtils:
         predictions = self.sess.run(self.softmax_tensor, {'DecodeJpeg/contents:0': image_data})
         predictions = np.squeeze(predictions)
         return predictions
+
+
+if __name__ == '__main__':
+    img_path = RAWDATA + "/sample.jpg"
+    "/media/be/DEB_DATA/WORKSPACE/Image-classifier/data/sample.jpg"
+    print(img_path)
+    feature = ImgNetUtils().get_feature_from_image(img_path=img_path)
+    print(len(feature))
