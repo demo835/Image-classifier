@@ -4,16 +4,17 @@ import numpy as np
 import tensorflow as tf
 import cv2
 import csv
+from sklearn.svm import SVC
+from sklearn.externals import joblib
 
-ROOT = os.path.dirname(__file__)
-if os.path.split(ROOT)[1] != "image_classifier":
-    ROOT = os.path.split(ROOT)[0]
-
-MODELS = os.path.join(ROOT, "models")
-FEATURES = os.path.join(ROOT, "features")
+cur_dir = os.path.dirname(os.path.realpath(__file__))
+ROOT = os.path.dirname(cur_dir)
+UTILS = os.path.join(ROOT, "utils")
 RAWDATA = os.path.join(ROOT, "data")
-
-FEATURE_DESC_MODE = "imgnet"  # "resnet"
 
 IMG_EXTS = ['.png', '.jpeg', '.jpg', '.bmp']
 CSV_EXT = [".csv"]
+
+
+
+FEATURE_DESC_MODE = "imgnet"  # "resnet"

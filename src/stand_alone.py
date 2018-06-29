@@ -10,7 +10,7 @@ def train_features(feature_mode="imgnet"):
         sys.stderr.write(" not exist folder for raw image data\n")
         sys.exit(1)
 
-    # --- import the feature descriptor model -------------------------------------------
+    # --- import the feature descriptor imgnet -------------------------------------------
     if feature_mode == "imgnet":
         from src.feature.imgnet_utils import ImgNetUtils
         emb = ImgNetUtils()
@@ -18,7 +18,7 @@ def train_features(feature_mode="imgnet"):
         from src.feature.renet_utils import ResNetUtils
         emb = ResNetUtils()
     else:
-        sys.stdout.write("\n unknown descriptor model: {}\n".format(feature_mode))
+        sys.stdout.write("\n unknown descriptor imgnet: {}\n".format(feature_mode))
         sys.exit(0)
 
     # --- check the raw images ----------------------------------------------------------
@@ -181,7 +181,7 @@ def load_classifier_model(feature_mode):
 
     
 def check_precision(feature_mode):
-    # --- load trained classifier model --------------------------------------------------------------
+    # --- load trained classifier imgnet --------------------------------------------------------------
     classifier = load_classifier_model(feature_mode=feature_mode)
 
     # --- load feature and label data ----------------------------------------------------------------
@@ -197,7 +197,7 @@ def check_precision(feature_mode):
         feature = data[i]
         feature = feature.reshape(1, -1)
 
-        # Get a prediction from the model including probability:
+        # Get a prediction from the imgnet including probability:
         probab = classifier.predict_proba(feature)
 
         max_ind = np.argmax(probab)
@@ -228,10 +228,10 @@ def check_precision(feature_mode):
 
 
 def test(feature_mode, img_path):
-    # --- load trained classifier model --------------------------------------------------------------
+    # --- load trained classifier imgnet --------------------------------------------------------------
     classifier = load_classifier_model(feature_mode=feature_mode)
 
-    # --- import the feature descriptor model --------------------------------------------------------
+    # --- import the feature descriptor imgnet --------------------------------------------------------
     if feature_mode == "imgnet":
         from src.feature.imgnet_utils import ImgNetUtils
         emb = ImgNetUtils()
@@ -239,7 +239,7 @@ def test(feature_mode, img_path):
         from src.feature.renet_utils import ResNetUtils
         emb = ResNetUtils()
     else:
-        sys.stdout.write("\n unknown descriptor model: {}\n".format(feature_mode))
+        sys.stdout.write("\n unknown descriptor imgnet: {}\n".format(feature_mode))
         sys.exit(0)
 
     # --- extract the feature from image -------------------------------------------------------------

@@ -1,4 +1,3 @@
 .idea
 data/
-features/
-models/
+utils/imgnet_classifier/imgnet/*
