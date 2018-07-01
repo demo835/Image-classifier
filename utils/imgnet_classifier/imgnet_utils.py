@@ -15,11 +15,12 @@ class ImgNetUtils:
         self.sess = tf.Session(config=config)
         self.softmax_tensor = self.sess.graph.get_tensor_by_name('pool_3:0')
 
-        sys.stdout.write("...init check mxnet model.\n")
+        sys.stdout.write("...init mxnet model.\n")
         test_img = np.ones((20, 20, 3), dtype=np.uint8)
         test_data = cv2.imencode('.jpg', test_img)[1].tostring()
         prediction = self.sess.run(self.softmax_tensor, {'DecodeJpeg/contents:0': test_data})
-        sys.stdout.write("...length of feature {}.\n".format(len(prediction)))
+        prediction = np.squeeze(prediction)
+        sys.stdout.write("...length of feature {}    {}.\n".format(len(prediction), "success" * (len(prediction) == 2048)))
 
     def __create_graph(self):
         # Creates a graph from saved GraphDef file and returns a saver.
@@ -63,9 +64,9 @@ class ImgNetUtils:
             tf.logging.fatal('File does not exist %s', img_path)
         image_data = tf.gfile.FastGFile(img_path, 'rb').read()
 
-        predictions = self.sess.run(self.softmax_tensor, {'DecodeJpeg/contents:0': image_data})
-        predictions = np.squeeze(predictions)
-        return predictions
+        prediction = self.sess.run(self.softmax_tensor, {'DecodeJpeg/contents:0': image_data})
+        prediction = np.squeeze(prediction)
+        return prediction
 
 
 if __name__ == '__main__':
