@@ -16,5 +16,4 @@ IMG_EXTS = ['.png', '.jpeg', '.jpg', '.bmp']
 CSV_EXT = [".csv"]
 
 
-
 FEATURE_DESC_MODE = "imgnet"  # "resnet"

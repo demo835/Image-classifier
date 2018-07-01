@@ -1,8 +1,9 @@
-import tarfile
-from six.moves import urllib
+
 
 from src.settings import *
 from utils.imgnet_classifier.imgnet_settings import *
+
+from src.download import download_and_extract_model
 
 
 class ImgNetUtils:
@@ -26,32 +27,13 @@ class ImgNetUtils:
         # Creates a graph from saved GraphDef file and returns a saver.
         # Creates graph from saved graph_def.pb.
         if not os.path.exists(os.path.join(self.model_dir, 'classify_image_graph_def.pb')):
-            self.__download_and_extract_model()
+            data_url = 'http://download.tensorflow.org/models/image/imagenet/inception-2015-12-05.tgz'
+            download_and_extract_model(data_url=data_url, save_dir=self.model_dir)
         with tf.gfile.FastGFile(os.path.join(
                 self.model_dir, 'classify_image_graph_def.pb'), 'rb') as f:
             graph_def = tf.GraphDef()
             graph_def.ParseFromString(f.read())
             _ = tf.import_graph_def(graph_def, name='')
-
-    def __download_and_extract_model(self):
-        # Download and extract imgnet tar file.
-        self.data_url = 'http://download.tensorflow.org/models/image/imagenet/inception-2015-12-05.tgz'
-        dest_directory = self.model_dir
-
-        if not os.path.exists(dest_directory):
-            os.makedirs(dest_directory)
-        filename = self.data_url.split('/')[-1]
-        filepath = os.path.join(dest_directory, filename)
-        if not os.path.exists(filepath):
-            def _progress(count, block_size, total_size):
-                sys.stdout.write("\r>> Downloading %s %.1f%%" % (
-                    filename, float(count * block_size) / float(total_size) * 100.0))
-                sys.stdout.flush()
-
-            filepath, _ = urllib.request.urlretrieve(self.data_url, filepath, _progress)
-            statinfo = os.stat(filepath)
-            sys.stdout.write("\nSuccessfully downloaded {} {} bytes.\n".format(filename, statinfo.st_size))
-        tarfile.open(filepath, 'r:gz').extractall(dest_directory)
 
     def get_feature_from_image(self, img_path):
         """Runs extract the feature from the image.
