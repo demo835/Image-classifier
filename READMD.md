@@ -1,23 +1,71 @@
 # Object Identification From Image
-
-Based on Neural Network
+Based on Convolution Neural Networks
 
 ## Configuration 
+
 - CNN1 to detect the common fish objects from the image (multiple object detector)
+
 - CNN2 to extract the embedded feature from the detected object
+
 - SVM classifier to binary classification(which is positive or negative object)
 
-## Object Cropping CNN1
-Model: [faster_rcnn_inception_resnet_v2_atrous_oid](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md)
-Which was trained with [Dataset](https://github.com/openimages/dataset)
+## Embedding Feature CNN1 and SVM Classifier
 
-LabelData: []
+Location: [utils/imgnet_classifier]
 
-## Embedding Feature CNN2
-Model: [Inception](https://github.com/tensorflow/models/tree/master/research/inception)
+Download the model to [utils/imgnet_classifier/imgnet] from [Inception](https://github.com/tensorflow/models/tree/master/research/inception)
 
-LabelData: []
+Embedded features of train data: [utils/obj_detector/imgnet] feature [train_data.csv] and labels [train_label.txt]
 
-## Dependencies 
-Tensorflow
-OpenCV
+Classifier: [utils/imgnet_classifier/imgnet/classifier.pkl] which is trained using SVM classification algorithm
+
+
+## Object Cropping CNN2
+
+Location: [utils/obj_detector]
+
+Download the model from [faster_rcnn_inception_resnet_v2_atrous_oid](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md) which was trained with [Dataset](https://github.com/openimages/dataset))
+
+Save and extract the model here [utils/obj_detector/model/faster_rcnn_inception_resnet_v2_atrous_oid_2018_01_28]
+
+Label data: [utils/obj_detector/model/oid_label_v4]
+
+
+## Dependencies
+
+- Tensorflow
+
+- OpenCV
+
+- Numpy
+
+- sklearn
+
+install the packages `$ sudo pip install -r requirements.txt`
+
+
+## Steps
+
+- prepare the positive and negative images:
+
+(save images on each folder [./data/potivtie] and [./data/negative])
+
+- convert the images to `jpg` format and indexing unique number:
+
+using the functions `convert2JPG()` and `unique_id()` on [src/pre_proc.py]
+
+- collect the embedded features from the raw images [utils/data/]:
+
+`collect_features()` on [utils/imgnet_classifier/features.py]
+
+- train and check the precision of trained model:
+
+`train()` on [utils/imgnet_classifier/train.py]
+
+`check_precision()` on [utils/imgnet_classifier/train.py]
+
+- object(fish) detection based on (pre-trained model)
+
+object detection `OidUtils().detect()` on [utils/obj_detector/detect_utils.py]
+
+bounding rect of detected object `draw_results()` on [utils/obj_detector/draw_obj_utils.py]
