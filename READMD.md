@@ -1,7 +1,10 @@
 # Object Identification From Image
+
 Based on Convolution Neural Networks
 
-## Configuration 
+## Summary
+
+### Configuration
 
 - CNN1 to detect the common fish objects from the image (multiple object detector)
 
@@ -9,7 +12,7 @@ Based on Convolution Neural Networks
 
 - SVM classifier to binary classification(which is positive or negative object)
 
-## Embedding Feature CNN1 and SVM Classifier
+### CNN For Embedding Feature and SVM Classifier
 
 Location: [utils/imgnet_classifier]
 
@@ -20,7 +23,7 @@ Embedded features of train data: [utils/obj_detector/imgnet] feature [train_data
 Classifier: [utils/imgnet_classifier/imgnet/classifier.pkl] which is trained using SVM classification algorithm
 
 
-## Object Cropping CNN2
+### CNN For Object Cropping
 
 Location: [utils/obj_detector]
 
@@ -44,7 +47,21 @@ Label data: [utils/obj_detector/model/oid_label_v4]
 install the packages `$ sudo pip install -r requirements.txt`
 
 
-## Steps
+## Utils
+
+Clone the project
+```
+ git clone https://github.com/drimyus/Image-classifier.git
+```
+
+Run these command lines, for testing and trainig
+
+### Train
+
+```
+    python3 src/train.py
+```
+
 
 - prepare the positive and negative images:
 
@@ -69,3 +86,12 @@ using the functions `convert2JPG()` and `unique_id()` on [src/pre_proc.py]
 object detection `OidUtils().detect()` on [utils/obj_detector/detect_utils.py]
 
 bounding rect of detected object `draw_results()` on [utils/obj_detector/draw_obj_utils.py]
+
+### Test
+
+
+```
+python3 src/test.py --file [path of test image e.g. sample.jpg]
+```
+
+The `result.jpg` and `result.json` will be created as a result.

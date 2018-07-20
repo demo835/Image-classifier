@@ -50,6 +50,12 @@ class ImgNetUtils:
         prediction = np.squeeze(prediction)
         return prediction
 
+    def get_feature_from_cvMat(self, cvimg):
+        image_data = cv2.imencode('.jpg', cvimg)[1].tostring()
+        prediction = self.sess.run(self.softmax_tensor, {'DecodeJpeg/contents:0': image_data})
+        prediction = np.squeeze(prediction)
+        return prediction
+
 
 if __name__ == '__main__':
     img_path = RAWDATA + "/sample.jpg"
