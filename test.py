@@ -5,7 +5,7 @@ from utils.imgnet_classifier.test import test
 
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("--file", required=True, default="/data/sample.jpg", help="path to the test image file")
+parser.add_argument("--file", required=False, default="sample.jpg", help="path to the test image file")
 a = parser.parse_args()
 
 
@@ -34,7 +34,7 @@ def proc(img_path):
 
     json_data['objects'] = objs
     with open("result.json", 'w') as jp:
-        json.dump(json_data, jp)
+        json.dump(json_data, jp, indent=2)
 
     cv2.imwrite("result.jpg", show_img)
     cv2.waitKey(0)
@@ -42,6 +42,10 @@ def proc(img_path):
 
 if __name__ == '__main__':
     img_path = a.file
+
+    # _cur_dir = os.path.dirname(os.path.realpath(__file__))
+    # img_path = _cur_dir + "/sample.jpg"
+
     if not os.path.exists(img_path):
         sys.stderr.write("no exist such file {}\n".format(img_path))
         sys.exit(0)

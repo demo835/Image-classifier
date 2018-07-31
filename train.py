@@ -4,7 +4,7 @@ from utils.imgnet_classifier.features import collect_features
 from utils.imgnet_classifier.train import train, check_precision
 
 
-def train():
+def train_func():
     # 1. preprocessing the train data
     # 1.1 convert all images to jpeg format
     sys.stdout.write(' >>> convert all images to jpeg format \n')
@@ -28,4 +28,4 @@ def train():
 
 
 if __name__ == '__main__':
-    train()
+    train_func()

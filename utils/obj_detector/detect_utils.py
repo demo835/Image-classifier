@@ -15,7 +15,7 @@ class OidUtils:
         self.max_number_of_boxes = 10
         self.minimum_confidence = 0.3
 
-        self.target_width = 700
+        self.target_width = 300
 
         # ------------------------ load label data ------------------------------------------------------------
         labeldict_path = OID_LABEL + '/oid_bbox_trainable_label_map.pbtxt.txt'
