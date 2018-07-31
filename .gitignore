@@ -3,3 +3,9 @@ data/back.tar.gz
 utils/imgnet_classifier/imgnet/*
 utils/obj_detector/model/faster_rcnn_inception_resnet_v2_atrous_oid_2018_01_28
 utils/obj_detector/result.jpg
+data/backup.tar.gz
+data/orion-dev-nvr.pem
+src/__pycache__/
+utils/__pycache__/
+utils/imgnet_classifier/__pycache__/
+utils/imgnet_classifier/imgnet/
