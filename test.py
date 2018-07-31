@@ -19,25 +19,29 @@ def proc(img_path):
 
     json_data = {
         "filename": img_path,
-        "size": {"height": img_h, "width": img_w},
+        "size": {"height": img_h, "width": img_w}
     }
+    dets = []
     for obj in objs:
         float_rect = obj['rect']
-        [x, y, x2, y2] = (np.array(float_rect) * np.array([img_w, img_h, img_w, img_h])).astype(np.uint).tolist()
+        [x, y, x2, y2] = (float_rect * np.array([img_w, img_h, img_w, img_h])).astype(np.uint)
         crop = img[y:y2, x:x2]
         pred_label = test(cvimg=crop)
-        objs.append(
+        dets.append(
             {
-                "rect": {"top": y, "left": x, "bottom": y2, "right": x2},
+                "rect": {"top": str(y), "left": str(x), "bottom": str(y2), "right": str(x2)},
                 "label": pred_label
             })
 
-    json_data['objects'] = objs
+    json_data["objects"] = dets
+    print("result", json_data)
+
     with open("result.json", 'w') as jp:
         json.dump(json_data, jp, indent=2)
 
     cv2.imwrite("result.jpg", show_img)
-    cv2.waitKey(0)
+
+    # cv2.waitKey(0)
 
 
 if __name__ == '__main__':
