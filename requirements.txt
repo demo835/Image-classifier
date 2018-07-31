@@ -1,4 +1,5 @@
-Numpy
+numpy
 opencv-contrib-python
 tensorflow
 sklearn
+scipy
