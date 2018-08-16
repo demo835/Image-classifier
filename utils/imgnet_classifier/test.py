@@ -38,4 +38,4 @@ def test(cvimg):
     else:
         predlbl = classifier.classes_[max_ind]
 
-    return predlbl
+    return predlbl, sort_probab[0]

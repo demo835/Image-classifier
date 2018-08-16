@@ -1,6 +1,6 @@
 from src.settings import *
-from utils.obj_detector.draw_obj_utils import draw_results
-from utils.obj_detector.detect_utils import OidUtils
+# from utils.obj_detector.draw_obj_utils import draw_results
+# from utils.obj_detector.detect_utils import OidUtils
 from utils.imgnet_classifier.test import test
 
 import argparse
@@ -14,32 +14,21 @@ def proc(img_path):
 
     img = cv2.imread(img_path)
     img_h, img_w = img.shape[:2]
-    objs = OidUtils().detect(img=img)
-    show_img = draw_results(img, results=objs)
+    # objs = OidUtils().detect(img=img)
+    # show_img = draw_results(img, results=objs)
+
+    pred_label, pred_conf = test(cvimg=img)
 
     json_data = {
         "filename": img_path,
-        "size": {"height": img_h, "width": img_w}
+        "size": {"height": img_h, "width": img_w},
+        "label": pred_label,
+        "confidence": pred_conf
     }
-    dets = []
-    for obj in objs:
-        float_rect = obj['rect']
-        [x, y, x2, y2] = (float_rect * np.array([img_w, img_h, img_w, img_h])).astype(np.uint)
-        crop = img[y:y2, x:x2]
-        pred_label = test(cvimg=crop)
-        dets.append(
-            {
-                "rect": {"top": str(y), "left": str(x), "bottom": str(y2), "right": str(x2)},
-                "label": pred_label
-            })
 
-    json_data["objects"] = dets
     print("result", json_data)
-
     with open("result.json", 'w') as jp:
         json.dump(json_data, jp, indent=2)
-
-    cv2.imwrite("result.jpg", show_img)
 
     # cv2.waitKey(0)
 
