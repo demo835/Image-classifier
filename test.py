@@ -30,6 +30,7 @@ def proc(img_path):
     with open("result.json", 'w') as jp:
         json.dump(json_data, jp, indent=2)
 
+    return json_data
     # cv2.waitKey(0)
 
 
