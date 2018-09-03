@@ -64,7 +64,7 @@ def submit():
 
                 if ret:
                     sys.stdout.write("\n successfully finished\n")
-                    return send_file(dst_file_path, mimetype='image/jpeg')
+                    return jsonify(result=ret)
                 else:
                     sys.stdout.write("\n some error\n")
                     return "Error"
